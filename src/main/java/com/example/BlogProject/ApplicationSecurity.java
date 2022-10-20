@@ -57,9 +57,10 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests()
-                .antMatchers("/user/login","/user/save","/post/all","/post/save").permitAll()
+                .antMatchers("/user/login","/user/save","/post/all","/post/find-post/{id}","/post/save","/comment/find-comment/{id}").permitAll()
                 .anyRequest().authenticated();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

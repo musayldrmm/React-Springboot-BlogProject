@@ -1,7 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import Axios from "axios";
 
-const comment = (props) => {
+const Comment = (props) => {
+  let id = useParams();
+
+  const longid = Number(id.id);
+  const [comment, commentfunc] = useState();
+  useEffect(() => {
+    Axios.get(`http://localhost:8080/comment/find-comment/${longid}`).then(
+      (response) => {
+        commentfunc(response.data);
+      }
+    );
+  }, []);
+
   const logincheck = (props) => {
     if (props.login.islogged == true) {
       return (
@@ -46,29 +60,18 @@ const comment = (props) => {
               alt="..."
             />
           </div>
-          <div className="ms-3">
-            <div className="fw-bold">Commenter Name</div>If you're going to lead
-            a space frontier, it has to be government; it'll never be private
-            enterprise. Because the space frontier is dangerous, and it's
-            expensive, and it has unquantified risks.
-          </div>
+          {comment?.map((comment) => (
+            <div className="ms-3" key={comment.id}>
+              <div className="fw-bold" >
+                {comment.user.name}
+              </div>
+              {comment.comment}
+            </div>
+          ))}
         </div>
-        <div className="d-flex">
-          <div className="flex-shrink-0">
-            <img
-              className="rounded-circle"
-              src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
-              alt="..."
-            />
-          </div>
-          <div className="ms-3">
-            <div className="fw-bold">Commenter Name</div>When I look at the
-            universe and all the ways the universe wants to kill us, I find it
-            hard to reconcile that with statements of beneficence.
-          </div>
-        </div>
+        <div className="d-flex"></div>
       </div>
     </div>
   );
 };
-export default comment;
+export default Comment;

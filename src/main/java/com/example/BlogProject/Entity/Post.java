@@ -1,5 +1,6 @@
 package com.example.BlogProject.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,7 @@ public class Post {
     private String imageUrl;
 
     @OneToOne(cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties(value = "password")
     private User user;
 
 }

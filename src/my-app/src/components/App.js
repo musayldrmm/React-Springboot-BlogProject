@@ -17,16 +17,32 @@ import {
 } from "react-router-dom";
 import React from "react";
 class App extends React.Component {
+
   constructor() {
     super();
-    this.state = {
-      content: [],
-      logginState: {
-        accestoken: "",
-        islogged: false,
-        userRole: "",
-      },
-    };
+    if(window.localStorage.getItem("logininfo")!==null){
+      const Data = window.localStorage.getItem("logininfo");
+      this.state = {
+        content: [],
+        logginState: {
+          accestoken: Data.accestoken,
+          islogged: true,
+          userRole: "USER",
+          userid: 0,
+        },
+      };
+    }
+    else{
+      this.state = {
+        content: [],
+        logginState: {
+          accestoken: "",
+          islogged: false,
+          userRole: "",
+          userid: 0,
+        },
+      };    }
+   
   }
   componentDidMount() {
     Axios.get("http://localhost:8080/post/all").then((response) => {
@@ -37,10 +53,13 @@ class App extends React.Component {
     this.setState((state) => ({
       logginState: { islogged: false, accestoken: "", userRole: "" },
     }));
+    window.localStorage.removeItem("logininfo");
   };
-  login = (accestoken) => {
+   login = (userid) => {
+    const Data = window.localStorage.getItem("logininfo");
+
     this.setState((state) => ({
-      logginState: { islogged: true, accestoken: accestoken, userRole: "USER" },
+      logginState: { islogged: true, accestoken:JSON.parse(Data).accestoken, userRole: "USER",userid:userid },
     }));
   };
   render() {
@@ -80,17 +99,16 @@ class App extends React.Component {
             exact
             element={
               <ContentPage
-                content={this.state.content}
                 logininfo={this.state.logginState}
               />
             }
           />
           <Route
-            path="/addPost"
+            path="/addPost/:id"
             exact
             element={
               this.state.logginState.islogged == true ? (
-                <AddPost />
+                <AddPost token={this.state.logginState.accestoken} />
               ) : (
                 <Navigate to="/login" />
               )

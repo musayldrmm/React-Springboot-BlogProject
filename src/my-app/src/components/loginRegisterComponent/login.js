@@ -16,8 +16,10 @@ const login=props=> {
     var str  = decoded.sub;
     str = str.split(",");
     const userid= str[0]
-   props.loginprocess(token)
-  }).catch(()=>{alert("Şifre yada mail hatalı")})
+    const logininformation={ islogged: true, accestoken: token, userRole: "USER",userid:userid }
+    window.localStorage.setItem('logininfo',JSON.stringify(logininformation))
+   props.loginprocess(userid)
+  }).catch((err)=>{alert(err)})
  }
   return (
     <section className="vh-90" style={{ backgroundcolor: "#9A616D" }}>

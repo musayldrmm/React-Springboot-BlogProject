@@ -1,13 +1,15 @@
 import "../css/navbar.css";
 import { Link } from "react-router-dom";
 import React from "react";
-
-const navbar = (props) => {
-
+const Navbar = (props) => {
   const logginCondition = (props) => {
     if (props.logininfo.islogged === true) {
       return (
-        <button onClick={(event) => props.logout(event)} type="button" className="btn btn-danger">
+        <button
+          onClick={(event) => props.logout(event)}
+          type="button"
+          className="btn btn-danger"
+        >
           Logout
         </button>
       );
@@ -28,25 +30,25 @@ const navbar = (props) => {
     if (props.logininfo.userRole === "ADMIN") {
       return (
         <React.Fragment>
-        <li className="nav-item">
-          <Link className="nav-link" to="/adminPage">
-            Admin-Page
-          </Link>
+          <li className="nav-item">
+            <Link className="nav-link" to="/adminPage">
+              Admin-Page
+            </Link>
           </li>
-           <li className="nav-item">
-           <Link className="nav-link" to="/addPost">
-             Add-Post
-           </Link>
-           </li>
-           </React.Fragment>
+          <li className="nav-item">
+            <Link className="nav-link" to="/addPost">
+              Add-Post
+            </Link>
+          </li>
+        </React.Fragment>
       );
     } else if (props.logininfo.userRole === "USER") {
       return (
         <li className="nav-item">
-          <Link className="nav-link" to="/addPost">
+          <Link className="nav-link" to={`/addPost/${props.logininfo.userid}`}>
             Add-Post
           </Link>
-          </li>
+        </li>
       );
     }
   };
@@ -74,7 +76,7 @@ const navbar = (props) => {
               Home <span className="sr-only"></span>
             </Link>
           </li>
-         {roleCondition(props)}
+          {roleCondition(props)}
 
           <form className="form-inline my-2 my-lg-0">
             <input
@@ -92,6 +94,4 @@ const navbar = (props) => {
   );
 };
 
-export default navbar;
-
-
+export default Navbar;
