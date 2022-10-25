@@ -7,9 +7,8 @@ const Contentpage = (props) => {
   let id = useParams();
   const longid = Number(id.id);
   const [content, setContent] = useState();
-  const [logininfo, setlogininfo] = useState();
   const [isFetched, setIsFetched] = useState(false);
-
+ 
   async function getData() {
     const data = await Axios.get(
       `http://localhost:8080/post/find-post/${longid}`
@@ -22,18 +21,16 @@ const Contentpage = (props) => {
       });
     return data;
   }
-  useEffect( ()=> {
-    const Data = window.localStorage.getItem("logininfo");
-    setlogininfo(Data);
+  useEffect(() => {
     (async () => {
       const newData = await getData();
       setContent(newData);
-      setIsFetched(true)
+      setIsFetched(true);
     })();
   }, []);
 
-  function loader () {
-    const fetch = isFetched
+  function loader() {
+    const fetch = isFetched;
     if (isFetched == true) {
       return (
         <article>
@@ -62,7 +59,7 @@ const Contentpage = (props) => {
         </div>
       </div>;
     }
-  };
+  }
   return (
     <div className="container mt-5">
       <div className="row">

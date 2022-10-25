@@ -22,8 +22,10 @@ public class JwtTokenUtil {
 
 
     public String generateAccessToken(User user) {
+        String role = user.getRole().get(0).getName();
+        System.out.println("burası role : "+role);
         return Jwts.builder()
-                .setSubject(String.format("%s,%s", user.getId(), user.getEmail()))
+                .setSubject(String.format("%s,%s,%s", user.getId(), user.getEmail(),role))
                 .setIssuer("Blog-Project")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))

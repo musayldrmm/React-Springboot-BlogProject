@@ -1,4 +1,31 @@
-function register() {
+import Axios from 'axios';
+import {  useNavigate } from "react-router-dom";
+
+
+
+function Register() {
+  const navigate = useNavigate();
+
+  const registerProcess=(event)=>{
+    let registerData={
+      name:"",
+      surname:"",
+      email:"",
+      password:"",
+      role:[{
+        id:0
+      }]
+    }
+    registerData.name=document.getElementById("name").value
+    registerData.surname=document.getElementById("surname").value
+    registerData.email=document.getElementById("email").value
+    registerData.password=document.getElementById("password").value
+    registerData.role[0].id=2
+
+    Axios.post("http://localhost:8080/user/save", registerData)
+      .then(navigate("/"))
+      .catch((err=>alert(err)));
+  }
   return (
     <section className="vh-90" style={{ backgroundcolor: "#9A616D" }}>
       <div className="container mt-5 h-100">
@@ -36,6 +63,7 @@ function register() {
                         <input
                           type="text"
                           className="form-control form-control-lg"
+                          id='name'
                         />
                         <label className="form-label">
                           Name
@@ -46,6 +74,7 @@ function register() {
                         <input
                           type="text"
                           className="form-control form-control-lg"
+                          id='surname'
                         />
                         <label className="form-label">
                           Surname
@@ -56,6 +85,7 @@ function register() {
                         <input
                           type="email"
                           className="form-control form-control-lg"
+                          id='email'
                         />
                         <label className="form-label">
                           Email address
@@ -66,6 +96,7 @@ function register() {
                         <input
                           type="password"
                           className="form-control form-control-lg"
+                          id='password'
                         />
                         <label className="form-label">
                           Password
@@ -76,6 +107,7 @@ function register() {
                         <button
                           className="btn btn-dark btn-lg btn-block"
                           type="button"
+                          onClick={(event)=>registerProcess(event)}
                         >
                           Register
                         </button>
@@ -98,4 +130,4 @@ function register() {
   );
 }
 
-export default register;
+export default Register;

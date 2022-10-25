@@ -17,51 +17,52 @@ import {
 } from "react-router-dom";
 import React from "react";
 class App extends React.Component {
-
   constructor() {
     super();
-    if(window.localStorage.getItem("logininfo")!==null){
-      const Data = window.localStorage.getItem("logininfo");
-      this.state = {
-        content: [],
-        logginState: {
-          accestoken: Data.accestoken,
-          islogged: true,
-          userRole: "USER",
-          userid: 0,
-        },
-      };
-    }
-    else{
-      this.state = {
-        content: [],
-        logginState: {
-          accestoken: "",
-          islogged: false,
-          userRole: "",
-          userid: 0,
-        },
-      };    }
-   
+    this.state = {
+      content: [],
+      logginState: {
+        accestoken: "",
+        islogged: false,
+        userRole: "",
+        userid: 0,
+      },
+    };
   }
   componentDidMount() {
     Axios.get("http://localhost:8080/post/all").then((response) => {
       this.setState((state) => ({ content: response.data }));
     });
+    if(window.localStorage.getItem("logininfo")){
+      const Data = window.localStorage.getItem("logininfo");
+      this.setState((state)=>({
+        logginState:JSON.parse(Data)
+      })) 
+    }
   }
   logout = () => {
     this.setState((state) => ({
-      logginState: { islogged: false, accestoken: "", userRole: "" },
+      logginState: { islogged: false, accestoken: "", userRole: "", userid: 0 },
     }));
     window.localStorage.removeItem("logininfo");
   };
-   login = (userid) => {
+  login = (userid) => {
     const Data = window.localStorage.getItem("logininfo");
 
     this.setState((state) => ({
-      logginState: { islogged: true, accestoken:JSON.parse(Data).accestoken, userRole: "USER",userid:userid },
+      logginState: {
+        islogged: true,
+        accestoken: JSON.parse(Data).accestoken,
+        userRole: "ADMIN",
+        userid: userid,
+      },
     }));
   };
+  addContentState=(element)=>{
+    this.setState({
+      content:[...this.state.content,element]
+    })
+  }
   render() {
     return (
       <div className="App">
@@ -97,18 +98,14 @@ class App extends React.Component {
           <Route
             path="/content/:id"
             exact
-            element={
-              <ContentPage
-                logininfo={this.state.logginState}
-              />
-            }
+            element={<ContentPage logininfo={this.state.logginState} />}
           />
           <Route
             path="/addPost/:id"
             exact
             element={
               this.state.logginState.islogged == true ? (
-                <AddPost token={this.state.logginState.accestoken} />
+                <AddPost token={this.state.logginState.accestoken} addPost={this.addContentState} />
               ) : (
                 <Navigate to="/login" />
               )
@@ -132,7 +129,7 @@ class App extends React.Component {
             element={
               this.state.logginState.userRole == "ADMIN" &&
               this.state.logginState.islogged == true ? (
-                <EditPost content={this.state.content} />
+                <EditPost/>
               ) : (
                 <Navigate to="/" />
               )

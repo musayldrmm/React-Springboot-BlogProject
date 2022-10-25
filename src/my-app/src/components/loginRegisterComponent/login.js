@@ -16,7 +16,8 @@ const login=props=> {
     var str  = decoded.sub;
     str = str.split(",");
     const userid= str[0]
-    const logininformation={ islogged: true, accestoken: token, userRole: "USER",userid:userid }
+    const userRole=str[2]
+    const logininformation={ islogged: true, accestoken: token, userRole: userRole,userid:userid }
     window.localStorage.setItem('logininfo',JSON.stringify(logininformation))
    props.loginprocess(userid)
   }).catch((err)=>{alert(err)})

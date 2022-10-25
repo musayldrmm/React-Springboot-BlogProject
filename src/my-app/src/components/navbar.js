@@ -36,7 +36,7 @@ const Navbar = (props) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/addPost">
+            <Link className="nav-link" to={`/addPost/${props.logininfo.userid}`}>
               Add-Post
             </Link>
           </li>

@@ -4,7 +4,10 @@ import Axios from "axios";
 const AddPost = (props) => {
   let id = useParams();
   const navigate = useNavigate();
-
+  const accestoken = JSON.parse(window.localStorage.getItem("logininfo"));
+  const configHeaders = {
+    Authorization: accestoken.accestoken,
+  };
   const contentPost = (event) => {
     const post = {
       title: "",
@@ -21,12 +24,13 @@ const AddPost = (props) => {
     post.user.id = Number(id.id);
 
     Axios.post("http://localhost:8080/post/save", post, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: props.token.accesToken,
-      },
+      headers:configHeaders
     })
       .then(navigate("/"))
+      .then(response=>{
+        props.addPost(response.data)
+
+      })
       .catch(console.error());
   };
 

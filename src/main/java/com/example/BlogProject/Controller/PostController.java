@@ -34,4 +34,8 @@ public class PostController {
         postService.removePost(id);
         return new ResponseEntity<Post>(HttpStatus.ACCEPTED);
     }
+    @PutMapping("/update-post")
+    public ResponseEntity <Post> updatePost(@RequestBody Post post){
+        return ResponseEntity.ok(postService.updatePost(post));
+    }
 }
